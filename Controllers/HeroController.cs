@@ -1,6 +1,8 @@
-﻿using Hero_API.Entities;
+﻿using Hero_API.Data;
+using Hero_API.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hero_API.Controllers
 {
@@ -8,19 +10,19 @@ namespace Hero_API.Controllers
     [ApiController]
     public class HeroController : ControllerBase
     {
+        // ctx == context
+        private readonly DataContext _ctx;
+
+        public HeroController(DataContext ctx)
+        {
+            _ctx = ctx;
+        }
+
+        // Get all the heroes from the database
         [HttpGet]
         public async Task<ActionResult<List<Hero>>> GetHeroes()
         {
-            var heroes = new List<Hero> {
-                new Hero
-                {
-                    Id = 1,
-                    Name = "Spider-Man",
-                    FullName = "Peter",
-                    LastName = "Parker",
-                    Place = "Queens"
-                }
-            };
+            var heroes = await _ctx.Heroes.ToListAsync();
 
             return Ok(heroes);
         }
