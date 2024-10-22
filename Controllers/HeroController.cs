@@ -27,6 +27,7 @@ namespace Hero_API.Controllers
             return Ok(heroes);
         }
 
+        // Get a single hero from the database
         [HttpGet("{id}")]
         public async Task<ActionResult<Hero>> GetHero(int id)
         {
@@ -36,5 +37,20 @@ namespace Hero_API.Controllers
             
             return Ok(hero);
         }
+
+        // Add a hero
+        [HttpPost]
+        public async Task<ActionResult<string>> AddHero(Hero hero)
+        {
+            if (hero is null)
+                return BadRequest("Wrong data");
+
+            _ctx.Heroes.Add(hero);
+            await _ctx.SaveChangesAsync();
+
+            return Ok("New Hero Added");
+
+        }
+
     }
 }
