@@ -26,5 +26,15 @@ namespace Hero_API.Controllers
 
             return Ok(heroes);
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Hero>> GetHero(int id)
+        {
+            var hero = await _ctx.Heroes.FindAsync(id);
+            if (hero is null)
+                return NotFound("Hero Not Found");
+            
+            return Ok(hero);
+        }
     }
 }
