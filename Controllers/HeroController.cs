@@ -52,5 +52,22 @@ namespace Hero_API.Controllers
 
         }
 
+        [HttpPut]
+        public async Task<ActionResult<Hero>> UpdateHero(Hero newHero)
+        {
+            var dbHero = await _ctx.Heroes.FindAsync(newHero.Id);
+            if (dbHero is null)
+                return NotFound("Hero Not Found");
+
+            dbHero.Name = newHero.Name;
+            dbHero.FullName = newHero.FullName;
+            dbHero.LastName = newHero.LastName;
+            dbHero.Place = newHero.Place;
+
+            await _ctx.SaveChangesAsync();
+
+            return Ok(await _ctx.Heroes.ToListAsync());
+        }
+
     }
 }
