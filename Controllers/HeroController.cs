@@ -3,6 +3,7 @@ using Hero_API.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Validations;
 
 namespace Hero_API.Controllers
 {
@@ -69,5 +70,16 @@ namespace Hero_API.Controllers
             return Ok(await _ctx.Heroes.ToListAsync());
         }
 
+        [HttpDelete]
+        public async Task<ActionResult<String>> DeleteHero(Hero hero)
+        {
+            if (hero == null)
+                return NotFound("Hero Not Found");
+
+            _ctx.Heroes.Remove(hero);
+            await _ctx.SaveChangesAsync();
+
+            return Ok($"{hero.Name} was deleted from the database.");
+        }
     }
 }
